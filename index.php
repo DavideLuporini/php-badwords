@@ -1,111 +1,42 @@
 <?php
-	$str_browser_language = !empty($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? strtok(strip_tags($_SERVER['HTTP_ACCEPT_LANGUAGE']), ',') : '';
-	$str_browser_language = !empty($_GET['language']) ? $_GET['language'] : $str_browser_language;
-	switch (substr($str_browser_language, 0,2))
-	{
-		case 'de':
-			$str_language = 'de';
-			break;
-		case 'en':
-			$str_language = 'en';
-			break;
-		default:
-			$str_language = 'en';
-	}
-    
-	$arr_available_languages = array();
-	$arr_available_languages[] = array('str_name' => 'English', 'str_token' => 'en');
-	$arr_available_languages[] = array('str_name' => 'Deutsch', 'str_token' => 'de');
-    
-	$str_available_languages = (string) '';
-	foreach ($arr_available_languages as $arr_language)
-	{
-		if ($arr_language['str_token'] !== $str_language)
-		{
-			$str_available_languages .= '<a href="'.strip_tags($_SERVER['PHP_SELF']).'?language='.$arr_language['str_token'].'" lang="'.$arr_language['str_token'].'" xml:lang="'.$arr_language['str_token'].'" hreflang="'.$arr_language['str_token'].'">'.$arr_language['str_name'].'</a> | ';
-		}
-	}
-	$str_available_languages = substr($str_available_languages, 0, -3);
+/* 
+|Creare una variabile con un paragrafo di testo a vostra scelta.
+|Stampare a schermo il paragrafo e la sua lunghezza.
+|Una parola da censurare viene passata dall'utente tramite parametro GET.
+|Stampare di nuovo il paragrafo e la sua lunghezza, dopo aver sostituito con tre asterischi (***) tutte le occorrenze della parola da censurare. 
+*/
+$bad_word = $_GET ? $_GET['word'] : '';
+
+$exercise = 'php-badwords';
+$text = 'La mia anima è pervasa da una mirabile serenità, simile a queste belle mattinate di maggio che io godo con tutto il cuore. Sono solo e mi rallegro di vivere in questo luogo che sembra esser creato per anime simili alla mia. Sono così felice, mio caro, così immerso nel sentimento della mia tranquilla esistenza che la mia arte ne soffre. Non potrei disegnare nulla ora, neppure un segno potrei tracciare; eppure mai sono stato così gran pittore come in questo momento. Quando l\'amata valle intorno a me si avvolge nei suoi vapori, e l\'alto sole posa sulla mia foresta impenetrabilmente oscura, e solo alcuni raggi si spingono nell\'interno sacrario, io mi stendo nell\'erba alta presso il ruscello che scorre, e più vicino alla terra osservo mille multiformi erbette; allora sento più vicino al mio cuore brulicare tra gli steli il piccolo mondo degli innumerevoli, infiniti vermiciattoli e moscerini, e sento la presenza dell\'Onnipossente che ci ha creati a sua immagine e ci tiene in una eterna gioia. Amico mio, quando dinanzi ai miei occhi si stende il crepuscolo e posa intorno a me il mondo e il cielo tutto nell\' anima mia come la sembianza di donna amata, allora spesso';
+$censure = '<span style="color: white; background-color:rgba(94, 2, 3, 0.7);">***</span>';
+$text_censured = str_replace($bad_word, $censure , $text);
+
 ?>
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head lang="<?php echo $str_language; ?>" xml:lang="<?php echo $str_language; ?>">
-<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<title>MAMP PRO</title>
-<style type="text/css">
-    body {
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: .9em;
-        color: #000000;
-        background-color: #FFFFFF;
-        margin: 0;
-        padding: 10px 20px 20px 20px;
-    }
-
-    samp {
-        font-size: 1.3em;
-    }
-
-    a {
-        color: #000000;
-        background-color: #FFFFFF;
-    }
-
-    sup a {
-        text-decoration: none;
-    }
-
-    hr {
-        margin-left: 90px;
-        height: 1px;
-        color: #000000;
-        background-color: #000000;
-        border: none;
-    }
-
-    #logo {
-        margin-bottom: 10px;
-        margin-left: 28px;
-    }
-
-    .text {
-        width: 80%;
-        margin-left: 90px;
-        line-height: 140%;
-    }
-</style>
+<!DOCTYPE html>
+<html lang="it">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title><?php echo $exercise ?></title>
 </head>
-
 <body>
-    <p><img src="MAMP-PRO-Logo.png" id="logo" alt="MAMP PRO Logo" width="250" height="49" /></p>
+    <h1>
+    <?php echo strtoupper($exercise) ?>
+    </h1>
+   <form action="index.php" method="GET">
+   <input type="text" placeholder="Scrivi la parola da censurare" name="word">
+   <button type="submit">Invia</button>   
+   </form>
+   <p><?php echo $text ?></p>
+   <p>Lunghezza: <?php echo strlen($text) ?></p>
+   <p><?php echo $text_censured ?></p>
+   <p>Lunghezza totale: <?php echo strlen($text_censured)?></p>
+   <p>Numero bad words: <?php echo substr_count($text_censured, '***')?></p>
+   <p>Numero lettere senza censure: <?php echo  strlen($text_censured) - substr_count($text_censured, '***') ?></p>
 
-<?php if ($str_language == 'de'): ?>
 
-    <p class="text"><strong>Der virtuelle <span lang="en" xml:lang="en">Host</span> wurde erfolgreich eingerichtet.</strong></p>
-    <p class="text">Wenn Sie diese Seite sehen, dann bedeutet dies, dass der neue virtuelle <span lang="en" xml:lang="en">Host</span> erfolgreich eingerichtet wurde. Sie können jetzt Ihren <span lang="en" xml:lang="en">Web</span>-Inhalt hinzufügen, diese Platzhalter-Seite<sup><a href="#footnote_1">1</a></sup> sollten Sie ersetzen <abbr title="beziehungsweise">bzw.</abbr> löschen.</p>
-    <p class="text">
-        Server-Name: <samp><?php echo $_SERVER['SERVER_NAME']; ?></samp><br />
-        Document-Root: <samp><?php echo $_SERVER['DOCUMENT_ROOT']; ?></samp>
-    </p>
-    <p class="text" id="footnote_1"><small><sup>1</sup> Dateien: <samp>index.php</samp> und <samp>MAMP-PRO-Logo.png</samp></small></p>
-    <hr />
-    <p class="text">This page in: <?php echo $str_available_languages; ?></p>
-
-<?php elseif ($str_language == 'en'): ?>
-
-    <p class="text"><strong>The virtual host was set up successfully.</strong></p>
-    <p class="text">If you can see this page, your new virtual host was set up successfully. Now, web content can be added and this placeholder page<sup><a href="#footnote_1">1</a></sup> should be replaced or deleted.</p>
-    <p class="text">
-        Server name: <samp><?php echo $_SERVER['SERVER_NAME']; ?></samp><br />
-        Document root: <samp><?php echo $_SERVER['DOCUMENT_ROOT']; ?></samp>
-    </p>
-    <p class="text" id="footnote_1"><small><sup>1</sup> Files: <samp>index.php</samp> and <samp>MAMP-PRO-Logo.png</samp></small></p>
-    <hr />
-    <p class="text">Diese Seite auf: <?php echo $str_available_languages; ?></p>
-
-<?php endif; ?>
 
 </body>
 </html>
